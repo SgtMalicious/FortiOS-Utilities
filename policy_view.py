@@ -3,9 +3,7 @@
 import sys
 import re
 from struct import unpack
-from socket import inet_aton, gethostbyname
 from ordereddict import OrderedDict
-from datetime import datetime
 
 class fgPolicy(object):
 	"""Class for a FortiOS Policy"""
