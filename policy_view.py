@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
 import sys
-import re
-from struct import unpack
 from ordereddict import OrderedDict
 
 class fgPolicy(object):
