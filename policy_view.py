@@ -160,13 +160,13 @@ if __name__ == '__main__':
 			elif option == "dstintf":
 				policy.set_dstintf(opt_args)
 			elif option == "srcaddr":
-				for addr in opt_args.split():
+				for addr in opt_args.split('" "'):
 					policy.add_src(addr)
 			elif option == "dstaddr":
-				for addr in opt_args.split():
+				for addr in opt_args.split('" "'):
 					policy.add_dst(addr)
 			elif option == "service":
-				for svc in opt_args.split():
+				for svc in opt_args.split('" "'):
 					policy.add_svc(svc)
 			elif option == "action":
 				policy.set_action(opt_args)
