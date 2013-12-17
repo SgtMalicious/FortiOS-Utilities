@@ -20,7 +20,7 @@ class fgPolicy(object):
 		self.attack = False
 		self.nat = ""
 
-		self.action = ""
+		self.action = "Deny"
 
 		self.disabled = False
 
