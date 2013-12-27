@@ -1,7 +1,15 @@
 #!/usr/bin/env python
 
 import sys
-from ordereddict import OrderedDict
+
+try:
+	from collections import OrderedDict
+except ImportError:
+	try:
+		from ordereddict import OrderedDict
+	except ImportError:
+		sys.stderr.write("Unable to import the OrderedDict module. Exiting...\n")
+		sys.exit(1)
 
 class fgPolicy(object):
 	"""Class for a FortiOS Policy"""
