@@ -18,8 +18,8 @@ class fgPolicy(object):
 				raise ValueError,"missing policy information"
 
 		self.id = id
-		self.src_zone = ""
-		self.dst_zone = ""
+		self.src_zone = []
+		self.dst_zone = []
 
 		self.webauth = False
 		self.traffic = False
@@ -37,10 +37,10 @@ class fgPolicy(object):
 		self.svc = []
 
 	def set_srcintf(self,src):
-		self.src_zone = src.replace('"','')
+		self.src_zone.append(src.replace('"',''))
 
 	def set_dstintf(self,dst):
-		self.dst_zone = dst.replace('"','')
+		self.dst_zone.append(dst.replace('"',''))
 	
 	def set_nat(self,type):
 		self.nat = type.capitalize()
@@ -79,9 +79,13 @@ def print_policy(policies=[]):
 
 	print "[1;34m%5s %-15s %-15s %-25s %-25s %-15s %-15s %-10s %-4s %s[m" % ("ID","From","To","Src-address","Dst-address","Service","Action","State","ASTL","NAT")
 	for p in policies:
-		print "%5s %-15s %-15s %-25s %-25s %-15s %-15s %-18s %s%s%s%s %s" % (p.id,p.src_zone[0:15],p.dst_zone[0:15],p.src_addr[0][0:25],p.dst_addr[0][0:25],p.svc[0][0:15],p.action,"[31mdisabled[m" if p.disabled else "[32menabled[m","X" if p.attack else "-","X" if p.schedule else "-","X" if p.traffic else "-","X" if p.log else "-",p.nat)
+		print "%5s %-15s %-15s %-25s %-25s %-15s %-15s %-18s %s%s%s%s %s" % (p.id,p.src_zone[0][0:15],p.dst_zone[0][0:15],p.src_addr[0][0:25],p.dst_addr[0][0:25],p.svc[0][0:15],p.action,"[31mdisabled[m" if p.disabled else "[32menabled[m","X" if p.attack else "-","X" if p.schedule else "-","X" if p.traffic else "-","X" if p.log else "-",p.nat)
 		
-		array_max = max(len(p.src_addr),len(p.dst_addr),len(p.svc))
+		array_max = max(len(p.src_zone),len(p.dst_zone),len(p.src_addr),len(p.dst_addr),len(p.svc))
+		if len(p.src_zone) < array_max:
+			p.src_zone += [''] * (array_max - len(p.src_zone))
+		if len(p.dst_zone) < array_max:
+			p.dst_zone += [''] * (array_max - len(p.dst_zone))
 		if len(p.src_addr) < array_max:
 			p.src_addr += [''] * (array_max - len(p.src_addr))
 		if len(p.dst_addr) < array_max:
@@ -90,7 +94,7 @@ def print_policy(policies=[]):
 			p.svc += [''] * (array_max - len(p.svc))
 
 		for i in range(1,array_max):
-			print "%37s %-25s %-25s %-15s" % ('',p.src_addr[i][0:25],p.dst_addr[i][0:25],p.svc[i])
+			print "      %-15s %-15s %-25s %-25s %-15s" % (p.src_zone[i][0:15],p.dst_zone[i][0:15],p.src_addr[i][0:25],p.dst_addr[i][0:25],p.svc[i])
 
 if __name__ == '__main__':
 
@@ -164,9 +168,11 @@ if __name__ == '__main__':
 			[option,opt_args] = args.split(None,1)
 
 			if option == "srcintf":
-				policy.set_srcintf(opt_args)
+				for intf in opt_args.split('" "'):
+				    policy.set_srcintf(intf)
 			elif option == "dstintf":
-				policy.set_dstintf(opt_args)
+				for intf in opt_args.split('" "'):
+				    policy.set_dstintf(intf)
 			elif option == "srcaddr":
 				for addr in opt_args.split('" "'):
 					policy.add_src(addr)
@@ -208,8 +214,10 @@ if __name__ == '__main__':
 	if len(sys.argv) == 5:
 		policies = []
 		for policy in policy_dict:
-			if policy_dict[policy].src_zone.lower() == sys.argv[3].lower() and policy_dict[policy].dst_zone.lower() == sys.argv[4].lower():
-				policies.append(policy_dict[policy])
+			for s_intf in policy_dict[policy].src_zone:
+				for d_intf in policy_dict[policy].dst_zone:
+					if s_intf.lower() == sys.argv[3].lower() and d_intf.lower() == sys.argv[4].lower():
+						policies.append(policy_dict[policy])
 
 		print_policy(policies)
 
