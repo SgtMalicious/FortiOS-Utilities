@@ -104,18 +104,24 @@ if __name__ == '__main__':
 	vdom = sys.argv[2]
 
 	in_vdom = 0
+	with_vdom = 0
 	in_policy = False
 
 	sys.stdout.write("Loading configuration...")
 	
 	try:
 		fd = open(sys.argv[1],'r')
+		line = fd.readline()
+
+		if int(line[:-1].split(':')[2].split('=')[1]):
+			with_vdom = 1
+
 		for line in fd.readlines():
-			if line[:-1] == "edit "+vdom:
+			if with_vdom and line[:-1] == "edit "+vdom:
 				in_vdom += 1
 
 			#if line[:-1] == "config firewall policy6" and in_vdom == 2: # for v6 policies
-			if line[:-1] == "config firewall policy" and in_vdom == 2: # for vdom config, first 'edit <vdom>' is blank config
+			if line[:-1] == "config firewall policy" and ( not with_vdom or in_vdom == 2 ): # for vdom config, first 'edit <vdom>' is blank config
 				in_policy = True
 
 			if line[:-1] == "end" and in_policy:
