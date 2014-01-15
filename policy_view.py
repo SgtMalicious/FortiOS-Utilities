@@ -99,7 +99,7 @@ def print_policy(policies=[]):
 if __name__ == '__main__':
 
 	if not len(sys.argv) >= 4:
-		sys.stderr.write("Usage: %s <fg config> <vdom> [ <policy id> | <from zone> <to zone> ]\n" % sys.argv[0])
+		sys.stderr.write("Usage: %s <fg config> [ <vdom> | none ] [ <policy id> | <from zone> <to zone> ]\n" % sys.argv[0])
 		sys.exit(1)
 
 	config = []
@@ -124,7 +124,7 @@ if __name__ == '__main__':
 			if with_vdom and line[:-1] == "edit "+vdom:
 				in_vdom += 1
 
-			#if line[:-1] == "config firewall policy6" and in_vdom == 2: # for v6 policies
+			#if line[:-1] == "config firewall policy6" for v6 policies
 			if line[:-1] == "config firewall policy" and ( not with_vdom or in_vdom == 2 ): # for vdom config, first 'edit <vdom>' is blank config
 				in_policy = True
 

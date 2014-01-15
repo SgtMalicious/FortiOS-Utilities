@@ -12,12 +12,13 @@ Python utility scripts for working with a Fortinet FortiGate FortiOS configurati
 
 * ANSI colors are specific to the BASH shell. Have not tested with others.
 * Requires Python >= 2.7 to support the OrderedDict collection or installation of ordereddict (easy_install ordereddict)
-* Primarily written with VDOMs enabled.
+* Primarily written with VDOMs enabled but will now skip certain logic if they are not.
 * Can support IPv6 policies with a little editing: s/config firewall policy/config firewall policy6/
+* Added new multi-select interface logic which is still new.
 
 ## License
 
-Copyright (c) 2013 William Allison
+Copyright (c) 2014 William Allison
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
