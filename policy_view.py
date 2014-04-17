@@ -103,7 +103,7 @@ def dump_policy(p):
 if __name__ == '__main__':
 
 	if not len(sys.argv) >= 4:
-		sys.stderr.write("Usage: %s <fg config> [ <vdom> | none ] [ <policy id> | <from zone> <to zone> ]\n" % sys.argv[0])
+		sys.stderr.write("Usage: %s <fg config> [ <vdom> | none ] [ dump | <policy id> | <from zone> <to zone> ]\n" % sys.argv[0])
 		sys.exit(1)
 
 	config = []
