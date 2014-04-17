@@ -215,7 +215,10 @@ if __name__ == '__main__':
 	sys.stdout.write("complete. %s policies loaded.\n" % len(policy_dict))
 
 	if sys.argv[3].isdigit():	
-		print_policy([policy_dict[sys.argv[3]],])
+		try:
+			print_policy([policy_dict[sys.argv[3]],])
+		except KeyError:
+			print "No such policy."
 
 	if len(sys.argv) == 5:
 		policies = []
