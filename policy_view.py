@@ -96,6 +96,10 @@ def print_policy(policies=[]):
 		for i in range(1,array_max):
 			print "      %-15s %-15s %-25s %-25s %-15s" % (p.src_zone[i][0:15],p.dst_zone[i][0:15],p.src_addr[i][0:25],p.dst_addr[i][0:25],p.svc[i])
 
+def dump_policy(p):
+
+	print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (p.id,','.join(p.src_zone),','.join(p.dst_zone),','.join(p.src_addr),','.join(p.dst_addr),','.join(p.svc),p.action,"disabled" if p.disabled else "enabled","X" if p.attack else "-","X" if p.schedule else "-","X" if p.traffic else "-","X" if p.log else "-",p.nat)
+
 if __name__ == '__main__':
 
 	if not len(sys.argv) >= 4:
@@ -219,6 +223,11 @@ if __name__ == '__main__':
 			print_policy([policy_dict[sys.argv[3]],])
 		except KeyError:
 			print "No such policy."
+
+	if sys.argv[3] == "dump":
+		print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % ("ID","From","To","Src-address","Dst-address","Service","Action","State","Attack","Schedule","Traffic Shaping","Logging","NAT")
+		for policy in policy_dict:
+			dump_policy(policy_dict[policy])
 
 	if len(sys.argv) == 5:
 		policies = []
