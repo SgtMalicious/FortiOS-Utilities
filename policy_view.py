@@ -229,6 +229,14 @@ if __name__ == '__main__':
 		for policy in policy_dict:
 			dump_policy(policy_dict[policy])
 
+	if sys.argv[3] == "available":
+		for policy_id in range(1, int(policy_dict.keys()[-1])+1):
+			if policy_dict.has_key(str(policy_id)):
+				if policy_dict[str(policy_id)].disabled:
+					print "[1;34mAvailable:[m %s" % policy_id
+			else:
+				print "     [32mFree:[m %s" % policy_id
+
 	if len(sys.argv) == 5:
 		policies = []
 		for policy in policy_dict:
