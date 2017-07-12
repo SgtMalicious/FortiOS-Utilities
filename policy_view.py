@@ -106,6 +106,11 @@ if __name__ == '__main__':
 		sys.stderr.write("Usage: %s <fg config> [ <vdom> | none ] [ dump | <policy id> | <from zone> <to zone> ]\n" % sys.argv[0])
 		sys.exit(1)
 
+	if sys.argv[0][-4] == '6':
+		policy_for_6_or_4 = "config firewall policy6"
+	else:
+		policy_for_6_or_4 = "config firewall policy"
+
 	config = []
 	policy_dict = OrderedDict()
 
@@ -128,8 +133,7 @@ if __name__ == '__main__':
 			if with_vdom and line[:-1] == "edit "+vdom:
 				in_vdom += 1
 
-			#if line[:-1] == "config firewall policy6" for v6 policies
-			if line[:-1] == "config firewall policy" and ( not with_vdom or in_vdom == 2 ): # for vdom config, first 'edit <vdom>' is blank config
+			if line[:-1] == policy_for_6_or_4 and ( not with_vdom or in_vdom == 2 ): # for vdom config, first 'edit <vdom>' is blank config
 				in_policy = True
 
 			if line[:-1] == "end" and in_policy:
@@ -198,7 +202,7 @@ if __name__ == '__main__':
 				policy.set_nat('S')
 			elif option == "ippool":
 				policy.set_nat('D')
-			elif option == "identity-based":
+			elif option == "identity-based" or option == "groups":
 				policy.set_webauth()
 				policy.set_action(policy.action + "~")
 			elif option == "schedule":
