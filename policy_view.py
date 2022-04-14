@@ -164,7 +164,11 @@ if __name__ == '__main__':
 			in_policy = False
 			continue
 
-		[cmd,args] = line.split(None,1)
+		try:
+			[cmd,args] = line.split(None,1)
+		except ValueError:
+			# wrapped comment or garbage
+			next
 
 		if cmd == "edit" and in_policy:
 			# skip sub policy blocks
