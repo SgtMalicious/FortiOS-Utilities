@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 
@@ -15,7 +15,7 @@ class fgPolicy(object):
 	"""Class for a FortiOS Policy"""
 	def __init__(self,id=None):
 		if id == None:
-				raise ValueError,"missing policy information"
+				raise ValueError("missing policy information")
 
 		self.id = id
 		self.src_zone = []
@@ -77,9 +77,9 @@ class fgPolicy(object):
 
 def print_policy(policies=[]):
 
-	print "[1;34m%5s %-15s %-15s %-25s %-25s %-15s %-15s %-10s %-4s %s[m" % ("ID","From","To","Src-address","Dst-address","Service","Action","State","ASTL","NAT")
+	print("[1;34m%(id)5s %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s %(act)-15s %(st)-10s %(astl)-4s %(nat)s[m" % {'id':"ID",'from':"From",'to':"To",'src':"Src-address",'dst':"Dst-address",'svc':"Service",'act':"Action",'st':"State",'astl':"ASTL",'nat':"NAT"})
 	for p in policies:
-		print "%5s %-15s %-15s %-25s %-25s %-15s %-15s %-18s %s%s%s%s %s" % (p.id,p.src_zone[0][0:15],p.dst_zone[0][0:15],p.src_addr[0][0:25],p.dst_addr[0][0:25],p.svc[0][0:15],p.action,"[31mdisabled[m" if p.disabled else "[32menabled[m","X" if p.attack else "-","X" if p.schedule else "-","X" if p.traffic else "-","X" if p.log else "-",p.nat)
+		print("%(id)5s %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s %(act)-15s %(st)-18s %(a)s%(s)s%(t)s%(l)s %(nat)s" % {'id':p.id,'from':p.src_zone[0][0:15],'to':p.dst_zone[0][0:15],'src':p.src_addr[0][0:25],'dst':p.dst_addr[0][0:25],'svc':p.svc[0][0:15],'act':p.action,'st':"[31mdisabled[m" if p.disabled else "[32menabled[m",'a':"X" if p.attack else "-",'s':"X" if p.schedule else "-",'t':"X" if p.traffic else "-",'l':"X" if p.log else "-",'nat':p.nat})
 		
 		array_max = max(len(p.src_zone),len(p.dst_zone),len(p.src_addr),len(p.dst_addr),len(p.svc))
 		if len(p.src_zone) < array_max:
@@ -94,11 +94,11 @@ def print_policy(policies=[]):
 			p.svc += [''] * (array_max - len(p.svc))
 
 		for i in range(1,array_max):
-			print "      %-15s %-15s %-25s %-25s %-15s" % (p.src_zone[i][0:15],p.dst_zone[i][0:15],p.src_addr[i][0:25],p.dst_addr[i][0:25],p.svc[i])
+			print("      %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s" % {'from':p.src_zone[i][0:15],'to':p.dst_zone[i][0:15],'src':p.src_addr[i][0:25],'dst':p.dst_addr[i][0:25],'svc':p.svc[i]})
 
 def dump_policy(p):
 
-	print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (p.id,','.join(p.src_zone),','.join(p.dst_zone),','.join(p.src_addr),','.join(p.dst_addr),','.join(p.svc),p.action,"disabled" if p.disabled else "enabled","X" if p.attack else "-","X" if p.schedule else "-","X" if p.traffic else "-","X" if p.log else "-",p.nat)
+	print(p.id,'\t',','.join(p.src_zone),'\t',','.join(p.dst_zone),'\t',','.join(p.src_addr),'\t',','.join(p.dst_addr),'\t',','.join(p.svc),'\t',p.action,'\t',"disabled" if p.disabled else "enabled",'\t',"X" if p.attack else "-",'\t',"X" if p.schedule else "-",'\t',"X" if p.traffic else "-",'\t',"X" if p.log else "-",'\t',p.nat)
 
 if __name__ == '__main__':
 
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 		if cmd == "edit":
 			in_policy = True;
 			policy = fgPolicy(args)
-			if policy_dict.has_key(policy.id):
+			if policy.id in policy_dict:
 				sys.stderr.write("Duplicate policy id entry detected: %s\n" % policy.id)
 			continue
 
@@ -230,20 +230,20 @@ if __name__ == '__main__':
 		try:
 			print_policy([policy_dict[sys.argv[3]],])
 		except KeyError:
-			print "No such policy."
+			print("No such policy.")
 
 	if sys.argv[3] == "dump":
-		print "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % ("ID","From","To","Src-address","Dst-address","Service","Action","State","Attack","Schedule","Traffic Shaping","Logging","NAT")
+		print("ID\tFrom\tTo\tSrc-address\tDst-address\tService\tAction\tState\tAttack\tSchedule\tTraffic Shaping\tLogging\tNAT")
 		for policy in policy_dict:
 			dump_policy(policy_dict[policy])
 
 	if sys.argv[3] == "available":
-		for policy_id in range(1, int(policy_dict.keys()[-1])+1):
-			if policy_dict.has_key(str(policy_id)):
+		for policy_id in range(1, int(next(reversed(policy_dict)))+1):
+			if str(policy_id) in policy_dict:
 				if policy_dict[str(policy_id)].disabled:
-					print "[1;34mAvailable:[m %s" % policy_id
+					print("[1;34mAvailable:[m ",policy_id)
 			else:
-				print "     [32mFree:[m %s" % policy_id
+				print("     [32mFree:[m ",policy_id)
 
 	if len(sys.argv) == 5:
 		policies = []
