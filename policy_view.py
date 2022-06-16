@@ -200,7 +200,7 @@ if __name__ == '__main__':
 			elif option == "dstaddr":
 				for addr in opt_args.split('" "'):
 					policy.add_dst(addr)
-			elif option == "internet-service-dst-id":
+			elif option == "internet-service-id":
 				for addr in opt_args.split('" "'):
 					policy.add_dst('Internet Service: '+addr)
 			elif option == "service":
