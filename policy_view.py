@@ -195,14 +195,15 @@ if __name__ == '__main__':
 				for addr in opt_args.split('" "'):
 					policy.add_src(addr)
 			elif option == "internet-service-src-id":
-				for addr in opt_args.split('" "'):
-					policy.add_src('Internet Service: '+addr)
+				for addr in opt_args.split(' '):
+					policy.add_src('ISDB Id: '+addr)
 			elif option == "dstaddr":
 				for addr in opt_args.split('" "'):
 					policy.add_dst(addr)
 			elif option == "internet-service-id":
-				for addr in opt_args.split('" "'):
-					policy.add_dst('Internet Service: '+addr)
+				policy.add_svc('Predefined')
+				for addr in opt_args.split(' '):
+					policy.add_dst('ISDB Id: '+addr)
 			elif option == "service":
 				for svc in opt_args.split('" "'):
 					policy.add_svc(svc)
@@ -261,4 +262,4 @@ if __name__ == '__main__':
 
 		print_policy(policies)
 
-# vim: ts=4 sw=4 nowrap
+# vim: ts=4 sw=4 nowrap noexpandtab
