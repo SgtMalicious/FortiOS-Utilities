@@ -197,19 +197,19 @@ if __name__ == '__main__':
 			elif option == "srcaddr6":
 				for addr in opt_args.split('" "'):
 					policy.add_src(addr + "(6)")
-			elif option == "internet-service-src-id":
+			elif option == "internet-service-src-name":
 				for addr in opt_args.split(' '):
-					policy.add_src('ISDB Id: '+addr)
+					policy.add_src(addr)
 			elif option == "dstaddr":
 				for addr in opt_args.split('" "'):
 					policy.add_dst(addr)
 			elif option == "dstaddr6":
 				for addr in opt_args.split('" "'):
 					policy.add_dst(addr + "(6)")
-			elif option == "internet-service-id":
+			elif option == "internet-service-name":
 				policy.add_svc('Predefined')
 				for addr in opt_args.split(' '):
-					policy.add_dst('ISDB Id: '+addr)
+					policy.add_dst(addr)
 			elif option == "service":
 				for svc in opt_args.split('" "'):
 					policy.add_svc(svc)
