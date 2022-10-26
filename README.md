@@ -1,20 +1,24 @@
 ## Description
 
-Python utility scripts for working with a Fortinet FortiGate FortiOS configuration file offline.
+Python utility scripts for working with a Fortinet FortiGate FortiOS policy configuration file offline or via the API.
 
 * policy_view - print policies offline from a configuration file (missing feature of the cli)
+* api_view - print policies using the FortiOS API on the firewall directly (missing feature of the cli)
 
 ## Requirements
 
 * Python >= 3
+* The API policy viewer requires an API key.
 
 ## Caveats for Policy script
 
 * ANSI colors are specific to the BASH shell. Have not tested with others.
 * Requires Python >= 3 to support the OrderedDict collection or installation of ordereddict (easy_install ordereddict)
-* Primarily written with VDOMs enabled but will now skip certain logic if they are not.
-* Can support IPv6 policies with a little editing: s/config firewall policy/config firewall policy6/
-* Added new multi-select interface logic which is still new.
+* Primarily written with VDOMs enabled but will now skip certain logic if they are not. (not relevant to api)
+* Supports IPv6 policy entries. FortiOS version < 6.4, create a symlink called policy_view6
+* Supports policies using ISDB addresses. May not work properly with FortiOS < 6.4
+* Added new multi-select interface logic.
+* Added API policy viewer that doesn't require downloading the configuration file. (new)
 
 ## License
 
