@@ -11,11 +11,19 @@ except ImportError:
 		sys.stderr.write("Unable to import the OrderedDict module. Exiting...\n")
 		sys.exit(1)
 
+class clr:
+	"""Coloring class for ANSI colors"""
+	Red = '\033[31m'
+	Grn = '\033[32m'
+	Yel = '\033[33m'
+	Blu = '\033[34m'
+	End = '\033[0m'
+
 class fgPolicy(object):
 	"""Class for a FortiOS Policy"""
 	def __init__(self,id=None):
 		if id == None:
-				raise ValueError("missing policy information")
+			raise ValueError("missing policy information")
 
 		self.id = id
 		self.src_zone = []
@@ -77,10 +85,13 @@ class fgPolicy(object):
 
 def print_policy(policies=[]):
 
-	print("[1;34m%(id)5s %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s %(act)-15s %(st)-10s %(astl)-4s %(nat)s[m" % {'id':"ID",'from':"From",'to':"To",'src':"Src-address",'dst':"Dst-address",'svc':"Service",'act':"Action",'st':"State",'astl':"ASTL",'nat':"NAT"})
+	print(f'{clr.Blu}{"ID":>5} {"From":<15} {"To":<15} {"Src-address":<25} {"Dst-address":<25} {"Service":<15} {"Action":<15} {"State":<10} {"ASTL":<4} {"NAT"}{clr.End}')
 	for p in policies:
-		print("%(id)5s %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s %(act)-15s %(st)-18s %(a)s%(s)s%(t)s%(l)s %(nat)s" % {'id':p.id,'from':p.src_zone[0][0:15],'to':p.dst_zone[0][0:15],'src':p.src_addr[0][0:25],'dst':p.dst_addr[0][0:25],'svc':p.svc[0][0:15],'act':p.action,'st':"[31mdisabled[m" if p.disabled else "[32menabled[m",'a':"X" if p.attack else "-",'s':"X" if p.schedule else "-",'t':"X" if p.traffic else "-",'l':"X" if p.log else "-",'nat':p.nat})
-		
+		print(
+f'{p.id:>5} {p.src_zone[0][0:15]:<15} {p.dst_zone[0][0:15]:<15} {p.src_addr[0][0:25]:<25} {p.dst_addr[0][0:25]:<25} {p.svc[0][0:15]:<15} {p.action:<15} \
+{clr.Red + "disable" + clr.End  if p.disabled else clr.Grn + "enable" + clr.End:<19} \
+{"X" if p.attack else "-"}{"X" if p.schedule else "-"}{"X" if p.traffic else "-"}{"X" if p.log else "-"} {p.nat}')
+
 		array_max = max(len(p.src_zone),len(p.dst_zone),len(p.src_addr),len(p.dst_addr),len(p.svc))
 		if len(p.src_zone) < array_max:
 			p.src_zone += [''] * (array_max - len(p.src_zone))
@@ -94,7 +105,7 @@ def print_policy(policies=[]):
 			p.svc += [''] * (array_max - len(p.svc))
 
 		for i in range(1,array_max):
-			print("      %(from)-15s %(to)-15s %(src)-25s %(dst)-25s %(svc)-15s" % {'from':p.src_zone[i][0:15],'to':p.dst_zone[i][0:15],'src':p.src_addr[i][0:25],'dst':p.dst_addr[i][0:25],'svc':p.svc[i]})
+			print(f'      {p.src_zone[i][0:15]:<15} {p.dst_zone[i][0:15]:<15} {p.src_addr[i][0:25]:<25} {p.dst_addr[i][0:25]:<25} {p.svc[i]:<15}' )
 
 def dump_policy(p):
 
@@ -254,9 +265,9 @@ if __name__ == '__main__':
 		for policy_id in range(1, int(next(reversed(policy_dict)))+1):
 			if str(policy_id) in policy_dict:
 				if policy_dict[str(policy_id)].disabled:
-					print("[1;34mAvailable:[m ",policy_id)
+					print(f'{clr.Blu}Available{clr.End}: {policy_id}')
 			else:
-				print("     [32mFree:[m ",policy_id)
+				print(f'{clr.Grn}{"Free":>9}{clr.End}: {policy_id}')
 
 	if len(sys.argv) == 5:
 		policies = []

@@ -7,18 +7,21 @@ Python utility scripts for working with a Fortinet FortiGate FortiOS policy conf
 
 ## Requirements
 
-* Python >= 3
+* Python >= 3.6
 * The API policy viewer requires an API key.
 
 ## Caveats for Policy script
 
 * ANSI colors are specific to the BASH shell. Have not tested with others.
-* Requires Python >= 3 to support the OrderedDict collection or installation of ordereddict (easy_install ordereddict)
+* Requires Python >= 3.6 to support newer printing style.
+* Requires the requests module (python -m pip install requests)
 * Primarily written with VDOMs enabled but will now skip certain logic if they are not. (not relevant to api)
 * Supports IPv6 policy entries. FortiOS version < 6.4, create a symlink called policy_view6
 * Supports policies using ISDB addresses. May not work properly with FortiOS < 6.4
 * Added new multi-select interface logic.
 * Added API policy viewer that doesn't require downloading the configuration file. (new)
+* Updated print functions from old style to modern formatted string literal style.
+* Updated ANSI coloring coding to look less like gibberish.
 
 ## License
 

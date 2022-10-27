@@ -4,7 +4,7 @@ import sys
 import requests
 import argparse
 
-from policy_view import fgPolicy,print_policy,dump_policy
+from policy_view import clr,fgPolicy,print_policy,dump_policy
 
 requests.packages.urllib3.disable_warnings()
 
@@ -145,9 +145,9 @@ if __name__ == "__main__":
 		for i in range(1,ids[-1]+1):
 			if i in ids:
 				if pol_dict[i]:
-					print("[1;34mAvailable:[m ",i)
+					print(f'{clr.Blu}Available{clr.End}: {i}')
 			else:
-				print("     [32mFree:[m ",i)
+				print(f'{clr.Grn}{"Free":>9}{clr.End}: {i}')
 	else:
 		print_policy(policies)
 	
